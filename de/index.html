@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DealPilot Europe — Find the Best Price Across Europe</title>
+  <meta name="description" content="Compare prices, delivery and offers from European retailers. Honest demo catalogue, no fake live data." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+  <div id="chrome-top"></div>
+
+  <section class="hero">
+    <div class="wrap">
+      <div class="kicker" data-t="heroKicker">European price comparison</div>
+      <h1 data-t="heroTitle">Find the Best Price Across Europe</h1>
+      <p class="lead" data-t="heroLead">Compare prices, delivery and offers from European retailers.</p>
+      <div class="hero-search-row">
+        <form class="search-box" id="hero-search" action="search.html">
+          <input name="q" id="q" autocomplete="off" data-t-placeholder="searchPlaceholder" placeholder="Search a product or describe what you need..." />
+          <button class="btn btn-gold" type="submit" data-t="comparePrices">Compare Prices</button>
+          <div class="suggest" id="suggest"></div>
+        </form>
+      </div>
+      <div class="examples" data-t="examples">Examples:
+        <a href="search.html?q=iPhone+under+700" data-t="ex1">iPhone under €700</a>
+        <a href="search.html?q=Laptop+for+programming+under+800" data-t="ex2">Laptop for programming under €800</a>
+        <a href="search.html?q=noise-cancelling+headphones" data-t="ex3">Best noise-cancelling headphones</a>
+      </div>
+      <div class="country-strip" id="country-strip"></div>
+    </div>
+  </section>
+
+  <section style="padding:22px 0">
+    <div class="wrap">
+      <div class="trust-note" data-t="demoBanner">This catalogue is demo data for product design. It is not live European market pricing.</div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-h">
+        <div>
+          <h2 data-t="catsTitle">Popular categories</h2>
+          <p data-t="catsLead">Laptops have the deepest demo catalogue. Other aisles are architectural placeholders until retailer feeds are connected.</p>
+        </div>
+        <a class="link" href="category.html?id=laptops" data-t="browseLaptops">Browse laptops</a>
+      </div>
+      <div class="cats" id="cats"></div>
+    </div>
+  </section>
+
+  <section class="deals">
+    <div class="wrap">
+      <div class="sec-h">
+        <div>
+          <h2 data-t="dealsTitle">Demo catalogue highlights</h2>
+          <p data-t="dealsLead">Largest gaps between sample list price and sample offer price. Not live deals.</p>
+        </div>
+        <a class="link" href="deals.html" data-t="viewAllDeals">View all</a>
+      </div>
+      <div class="deal-grid" id="deals"></div>
+    </div>
+  </section>
+
+  <section class="ai-band">
+    <div class="wrap">
+      <div class="ai-grid">
+        <div>
+          <div class="kicker" data-t="aiKicker">AI shopping assistant</div>
+          <h2 style="font-family:var(--serif);font-size:clamp(28px,3vw,40px);margin:8px 0 12px" data-t="aiTitle">Not sure what to buy? Ask AI.</h2>
+          <p style="color:#c5d0e0;max-width:48ch;margin-bottom:16px" data-t="aiLead">We extract budget, country and use-case, then match the local catalogue. No live LLM until you configure a provider.</p>
+          <div class="chat">
+            <div class="msgs" id="home-msgs"></div>
+            <form class="chat-form" id="home-ai">
+              <input id="home-ai-q" placeholder="Tell us what you need…" />
+              <button class="btn btn-gold" type="submit" data-t="aiAsk">Ask</button>
+            </form>
+          </div>
+          <div class="chips">
+            <button class="chip" data-q="Best laptop under €800 for programming">Laptop under €800</button>
+            <button class="chip" data-q="I need a laptop for university, €700 budget, good battery.">University + battery</button>
+            <button class="chip" data-q="Light travel laptop under €650">Light travel</button>
+          </div>
+        </div>
+        <aside class="ai-side" id="ai-side"></aside>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-h">
+        <div>
+          <h2 data-t="compareSection">Compare products</h2>
+          <p data-t="compareLead">Select up to four products. Specs are from the demo catalogue.</p>
+        </div>
+        <a class="link" href="compare.html" data-t="seeFull">Open comparison</a>
+      </div>
+      <div class="table-wrap" id="home-cmp"></div>
+    </div>
+  </section>
+
+  <section class="deals">
+    <div class="wrap">
+      <div class="sec-h">
+        <div>
+          <h2 data-t="storesTitle">Retailer coverage</h2>
+          <p data-t="storesLead">Only Germany has demo offer rows. Other countries are reserved for future merchant partnerships.</p>
+        </div>
+        <a class="link" href="stores.html" data-t="allMarkets">All markets</a>
+      </div>
+      <div class="store-grid" id="stores"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-h">
+        <div>
+          <h2 data-t="howTitle">How DealPilot works</h2>
+          <p data-t="howNote">Price data is provided for comparison purposes. Availability and prices can change.</p>
+        </div>
+        <a class="link" href="how.html" data-t="navHow">How it works</a>
+      </div>
+      <div class="trust-grid" id="how-grid"></div>
+      <div class="trust-note" data-t="affiliateNote">We may earn a commission if you buy via a configured affiliate link. None are configured yet.</div>
+    </div>
+  </section>
+
+  <section class="deals">
+    <div class="wrap">
+      <div class="sec-h">
+        <div>
+          <h2 data-t="guidesTitle">Buying guides</h2>
+          <p data-t="guidesLead">Editorial pages for search intent. No fabricated lab tests or expert credentials.</p>
+        </div>
+        <a class="link" href="guides.html" data-t="allGuides">All guides</a>
+      </div>
+      <div class="guides" id="guides"></div>
+    </div>
+  </section>
+
+  <div id="chrome-bottom"></div>
+  <script type="module" src="/js/home.js"></script>
+</body>
+</html>

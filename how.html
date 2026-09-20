@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>How DealPilot works — DealPilot Europe</title>
+  <meta name="description" content="How DealPilot collects, normalizes and compares offers, and where demo data is used." />
+  <link rel="canonical" href="/how.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+  <div id="chrome-top"></div>
+  <div class="wrap page-hero" style="max-width:860px">
+    <div class="crumb"><a href="index.html">Home</a> / <span data-t="howTitle">How it works</span></div>
+    <h1 style="font-family:var(--serif);font-size:clamp(28px,3vw,40px);color:var(--navy)" data-t="howTitle">How DealPilot works</h1>
+    <div class="trust-note" data-t="demoBanner" style="margin:16px 0 22px"></div>
+    <div class="trust-grid" id="how-grid" style="margin-bottom:22px"></div>
+    <div class="card">
+      <h2 style="font-family:var(--serif);color:var(--navy)">Data sources</h2>
+      <ul class="check">
+        <li>Official retailer APIs</li>
+        <li>Affiliate feeds</li>
+        <li>Merchant feeds</li>
+        <li>Approved product-data providers</li>
+      </ul>
+      <p class="note">No scraping that violates retailer terms. Every price row must carry source, timestamp, currency, shipping and availability.</p>
+      <h2 style="font-family:var(--serif);color:var(--navy);margin-top:18px">What is demo today</h2>
+      <p>All products, offers, retailers and guides in this build are demo seed data. Price history is intentionally empty. Alerts are stored in your browser only. No affiliate URL is configured, so “View Deal” logs a local click instead of redirecting.</p>
+      <p class="note" data-t="howNote">Price data is provided for comparison purposes. Availability and prices can change.</p>
+      <a class="btn btn-navy" href="affiliate-disclosure.html" style="margin-top:10px" data-t="disclosure">Affiliate disclosure</a>
+    </div>
+  </div>
+  <div id="chrome-bottom"></div>
+  <script type="module" src="/js/how.js"></script>
+</body>
+</html>

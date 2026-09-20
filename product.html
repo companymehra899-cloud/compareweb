@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Product — DealPilot Europe</title>
+  <meta name="description" content="Compare retailer offers, total price, delivery and price history for this product in the DealPilot demo catalogue." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+  <div id="chrome-top"></div>
+  <div class="wrap page-hero" id="page"></div>
+  <div class="sticky-cta" id="sticky"></div>
+  <div id="chrome-bottom"></div>
+  <div class="modal" id="go-modal">
+    <div class="card">
+      <h3 style="font-family:var(--serif);font-size:24px;color:var(--navy);margin-bottom:8px" data-t="goStore">Leaving DealPilot</h3>
+      <p class="tagline" id="go-text"></p>
+      <div style="display:flex;gap:8px;margin-top:16px">
+        <button class="btn btn-navy" id="go-ok"></button>
+        <button class="btn btn-ghost" id="go-cancel" data-t="stay">Stay</button>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="/js/product.js"></script>
+</body>
+</html>

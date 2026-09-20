@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Shopping Assistant — DealPilot Europe</title>
+  <meta name="description" content="Describe budget, country and use-case. DealPilot extracts requirements and matches the honest demo catalogue." />
+  <link rel="canonical" href="/assistant.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+  <div id="chrome-top"></div>
+  <section class="ai-band" style="padding-top:48px">
+    <div class="wrap">
+      <div class="kicker" data-t="aiKicker">AI shopping assistant</div>
+      <h1 style="font-family:var(--serif);font-size:clamp(32px,4vw,48px);margin:8px 0 12px" data-t="aiTitle">Not sure what to buy? Ask AI.</h1>
+      <p style="color:#c5d0e0;max-width:52ch;margin-bottom:24px" data-t="aiLead">We extract budget, country and use-case, then match the local catalogue.</p>
+      <p id="ai-mode" style="color:#8fa1b8;max-width:60ch;margin:-12px 0 24px;font-size:13px"></p>
+      <div class="ai-grid">
+        <div class="chat" style="min-height:420px">
+          <div class="msgs" id="msgs"></div>
+          <form class="chat-form" id="form">
+            <input id="input" data-t-placeholder="searchPlaceholder" placeholder="Search a product or describe what you need..." />
+            <button class="btn btn-gold" type="submit" data-t="aiAsk">Ask</button>
+          </form>
+        </div>
+        <aside class="ai-side" id="side"></aside>
+      </div>
+      <div class="chips" style="margin-top:16px">
+        <button class="chip" data-q="Best laptop under €800 for programming">Laptop under €800</button>
+        <button class="chip" data-q="I need a laptop for university, €700 budget, good battery.">University + battery</button>
+        <button class="chip" data-q="Gaming laptop with RTX under €900">Gaming RTX</button>
+        <button class="chip" data-q="Repairable Linux laptop for developers">Framework / Linux</button>
+      </div>
+    </div>
+  </section>
+  <div class="wrap" style="padding:40px 0 70px">
+    <h2 style="font-family:var(--serif);color:var(--navy);margin-bottom:16px" data-t="bestMatches">Best matches for your requirements</h2>
+    <div id="options"></div>
+  </div>
+  <div id="chrome-bottom"></div>
+  <script type="module" src="/js/assistant.js"></script>
+</body>
+</html>
