@@ -2,14 +2,14 @@
  * Privacy-conscious analytics.
  *
  * Only the events below are recorded, with no personal data, no IP, no user id.
- * A consent flag gates collection. Numbers shown in admin are actual collected
- * events only — never fabricated traffic or revenue.
+ * A consent flag gates collection. Numbers reported internally are actual
+ * collected events only — never fabricated traffic or revenue.
  */
 
 const EVENTS_KEY = 'dealpilot.events.v1'
 const CONSENT_KEY = 'dealpilot.analytics.consent.v1'
 
-export const EVENTS = ['search', 'product_view', 'compare', 'ai_query', 'price_alert_created', 'deal_click', 'guide_view']
+export const EVENTS = ['search', 'product_view', 'compare', 'ai_query', 'deal_click', 'guide_view']
 
 export function hasConsent() {
   return localStorage.getItem(CONSENT_KEY) === 'granted'

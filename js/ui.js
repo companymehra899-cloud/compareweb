@@ -1,7 +1,7 @@
 import { COUNTRIES, CATEGORIES, formatMoney, lowestOffer, savingPct, getRetailer, stockLabel, SEED_AT, categoryCount } from './data.js'
 import { loadPrefs, setCountry, setLang, toggleCompare, bootFromPath, qs } from './state.js'
 import { t as tr } from './i18n.js'
-import { evaluateAlerts, getRetailers } from './db.js'
+import { getRetailers } from './db.js'
 import { displayPriceSync } from './core/currency.js'
 import { freshnessState, freshnessLabel, freshnessClass } from './core/freshness.js'
 import { resolveAffiliateLink } from './core/affiliate.js'
@@ -66,7 +66,6 @@ export function money(n) {
 
 export function header(active = 'home') {
   bootFromPath()
-  evaluateAlerts()
   const prefs = loadPrefs()
   const lang = prefs.lang
   const links = [
@@ -76,8 +75,7 @@ export function header(active = 'home') {
     ['compare.html', 'compare', t('navCompare')],
     ['assistant.html', 'ai', t('navAI')],
     ['guides.html', 'guides', t('navGuides')],
-    ['stores.html', 'stores', t('navStores')],
-    ['alerts.html', 'alerts', t('navAccount')]
+    ['stores.html', 'stores', t('navStores')]
   ]
   const countries = COUNTRIES.map((c) => {
     const label = c.code === 'DE' ? t('germany') : c.code === 'FR' ? t('france') : c.code === 'NL' ? t('netherlands') : c.code === 'ES' ? t('spain') : c.code === 'IT' ? t('italy') : t('uk')
@@ -150,8 +148,6 @@ export function footer() {
         <div>
           <h4>${t('disclosure')}</h4>
           <a href="affiliate-disclosure.html">${t('disclosure')}</a>
-          <a href="admin.html">${t('admin')}</a>
-          <a href="alerts.html">${t('navAccount')}</a>
           <a href="sitemap.xml">Sitemap</a>
         </div>
       </div>
@@ -208,7 +204,7 @@ export function resultCard(p) {
       ${lo ? `<div class="fresh-row">${freshBadge(lo)}</div>` : ''}
       <div class="row-actions">
         <label class="chk"><input type="checkbox" data-compare="${p.id}" ${on ? 'checked' : ''}/> ${t('compareCheck')}</label>
-        <a class="link" href="product.html?id=${p.id}#alert">${t('setAlert')}</a>
+        <a class="link" href="product.html?id=${p.id}">${t('viewDeal')}</a>
       </div>
     </div>
     <div class="result-price">

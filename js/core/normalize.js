@@ -83,7 +83,7 @@ export function matchProducts(existing, candidate) {
 
 /**
  * Group a normalized product list into canonical groups with a match state.
- * Uncertain groups are flagged for admin review rather than merged.
+ * Uncertain groups are flagged for operator review rather than merged.
  */
 export function canonicalize(products) {
   const groups = []

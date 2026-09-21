@@ -1,9 +1,6 @@
 import { PRODUCTS, RETAILERS, GUIDES, COUNTRIES, CATEGORIES, LANGUAGES, SEED_AT } from './data.js'
 
 const DB_KEY = 'dealpilot.db.v2'
-const ALERT_KEY = 'dealpilot.alerts.v1'
-const CLICK_KEY = 'dealpilot.clicks.v1'
-const USER_KEY = 'dealpilot.users.v1'
 
 function clone(x) {
   return JSON.parse(JSON.stringify(x))
@@ -62,7 +59,6 @@ function emptyDb() {
     countries: clone(COUNTRIES),
     categories: clone(CATEGORIES),
     languages: clone(LANGUAGES),
-    users: [{ id: 'local', email: '', created: SEED_AT, demo: true }],
     seedAt: SEED_AT
   })
 }
@@ -138,92 +134,4 @@ export function upsertOffer(productId, offer) {
 
 export function getGuides() {
   return loadDb().guides
-}
-
-/* ---- legacy local alert helpers (kept for the alerts page mirror) ---- */
-
-export function loadAlerts() {
-  try {
-    return JSON.parse(localStorage.getItem(ALERT_KEY) || '[]')
-  } catch {
-    return []
-  }
-}
-
-export function saveAlerts(list) {
-  localStorage.setItem(ALERT_KEY, JSON.stringify(list))
-}
-
-export function addAlert({ productId, target, email, country }) {
-  const list = loadAlerts()
-  const row = {
-    id: 'al-' + Date.now(),
-    productId,
-    target: Number(target),
-    email: email || '',
-    country: country || 'DE',
-    status: 'active',
-    created: new Date().toISOString(),
-    emailConfigured: false
-  }
-  list.push(row)
-  saveAlerts(list)
-  return row
-}
-
-export function setAlertStatus(id, status) {
-  const list = loadAlerts().map((a) => (a.id === id ? { ...a, status } : a))
-  saveAlerts(list)
-  return list
-}
-
-export function loadClicks() {
-  try {
-    return JSON.parse(localStorage.getItem(CLICK_KEY) || '[]')
-  } catch {
-    return []
-  }
-}
-
-export function trackClick({ productId, retailerId, total }) {
-  const list = loadClicks()
-  list.push({
-    id: 'clk-' + Date.now(),
-    productId,
-    retailerId,
-    total,
-    at: new Date().toISOString(),
-    affiliateConfigured: false
-  })
-  localStorage.setItem(CLICK_KEY, JSON.stringify(list))
-  return list
-}
-
-export function loadUsers() {
-  try {
-    return JSON.parse(localStorage.getItem(USER_KEY) || '[]')
-  } catch {
-    return []
-  }
-}
-
-export function upsertUser(email) {
-  const list = loadUsers()
-  if (email && !list.find((u) => u.email === email)) {
-    list.push({ id: 'u-' + Date.now(), email, created: new Date().toISOString() })
-    localStorage.setItem(USER_KEY, JSON.stringify(list))
-  }
-  return list
-}
-
-export function evaluateAlerts() {
-  const products = getProducts()
-  const list = loadAlerts().map((a) => {
-    const p = products.find((x) => x.id === a.productId)
-    const lo = p?.offers?.length ? [...p.offers].sort((x, y) => x.total - y.total)[0] : null
-    if (a.status === 'active' && lo && lo.total <= a.target) return { ...a, status: 'triggered' }
-    return a
-  })
-  saveAlerts(list)
-  return list
 }

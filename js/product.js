@@ -3,7 +3,6 @@ import { getProductById, getProducts, getRetailers } from './db.js'
 import { loadPrefs } from './state.js'
 import { matchProducts } from './ai.js'
 import { mount, t, offerMoney, amountMoney, freshBadge, productVisual, demoBadge, offerTable, resultCard, bindCompareChecks, qs, toast } from './ui.js'
-import { createAlert, verifyUrl, emailProviderStatus } from './core/alerts.js'
 import { recordPriceEvent, historyStats, HISTORY_EMPTY_MESSAGE } from './core/history.js'
 import { resolveAffiliateLink, trackClick } from './core/affiliate.js'
 import { track } from './core/analytics.js'
@@ -19,7 +18,6 @@ const lo = lowestOffer(p)
 const save = savingPct(p)
 const ai = matchProducts(p.name, prefs.country)
 const retailers = getRetailers()
-const email = emailProviderStatus()
 
 // Only genuinely observed non-seed offers may enter the price history store.
 if (lo && lo.source && lo.source !== 'seed') recordPriceEvent(lo, p.id)
@@ -46,7 +44,6 @@ document.getElementById('page').innerHTML = `
         ${lo ? `<div class="fresh-row">${freshBadge(lo)}</div>` : ''}
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px">
           <a class="btn btn-navy" href="#offers">${t('comparePricesBtn')}</a>
-          <a class="btn btn-gold" href="#alert">${t('setAlert')}</a>
           <label class="btn btn-ghost"><input type="checkbox" data-compare="${p.id}" style="margin-right:8px"/>${t('addCompare')}</label>
         </div>
       </div>
@@ -101,18 +98,6 @@ document.getElementById('page').innerHTML = `
         <p class="note">${HISTORY_EMPTY_MESSAGE}</p>
       </div>
 
-      <div class="card" style="margin-top:16px" id="alert">
-        <h2 style="font-family:var(--serif);color:var(--navy)">${t('setAlert')}</h2>
-        <p class="mute">Set a target price. We email you only when a verified price drops to or below it. No account needed.</p>
-        ${email.configured ? '' : `<p class="note">Email delivery is not configured yet. You will get a verification link but no email is sent until a provider is connected.</p>`}
-        <form class="alert-form" id="alert-form">
-          <input type="number" name="target" value="${lo ? Math.max(1, Math.round(lo.total * 0.9)) : 500}" min="1" aria-label="${t('targetPrice')}" />
-          <input type="email" name="email" placeholder="you@email.com" aria-label="${t('email')}" required />
-          <button class="btn btn-gold" type="submit">${t('createAlert')}</button>
-        </form>
-        <p class="mute" id="alert-msg" style="margin-top:10px">${t('noEmail')}</p>
-      </div>
-
       <div class="card" style="margin-top:16px">
         <h2 style="font-family:var(--serif);color:var(--navy)">${t('alternative')}</h2>
         ${(ai.options || []).filter((x) => x.p.id !== p.id).slice(0, 2).map((x) => resultCard(x.p)).join('') || `<p class="mute">${t('emptySearch')}</p>`}
@@ -132,30 +117,6 @@ document.getElementById('periods').addEventListener('click', (e) => {
   period = Number(b.dataset.d)
   document.querySelectorAll('.period').forEach((x) => x.classList.toggle('on', x === b))
   toast(HISTORY_EMPTY_MESSAGE)
-})
-
-document.getElementById('alert-form').addEventListener('submit', async (e) => {
-  e.preventDefault()
-  const fd = new FormData(e.target)
-  const msg = document.getElementById('alert-msg')
-  const res = await createAlert({
-    email: fd.get('email'),
-    productId: p.id,
-    country: prefs.country,
-    target: fd.get('target'),
-    currency: lo?.currency || 'EUR'
-  })
-  if (!res.ok) {
-    msg.textContent = res.error
-    return
-  }
-  const r = res.record
-  msg.innerHTML = res.emailSent
-    ? 'Check your inbox to verify the alert.'
-    : `Alert created (${r.status}). Verification link: <a href="${verifyUrl(r.verification_token)}">verify alert</a>. No email was sent because email delivery is not configured.`
-  toast(t('alertSaved'))
-  track('price_alert_created', { product_id: p.id, country: prefs.country })
-  e.target.reset()
 })
 
 const modal = document.getElementById('go-modal')

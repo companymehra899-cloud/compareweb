@@ -1,7 +1,7 @@
 /**
  * Affiliate link safety + click tracking.
  *
- * Admin-entered URLs must never become an open redirect. A link is only usable
+ * Operator-entered URLs must never become an open redirect. A link is only usable
  * when its host is an approved retailer domain. Otherwise the UI shows
  * "Retailer link unavailable" and does not redirect anywhere.
  */
@@ -74,7 +74,7 @@ export function trackClick({ productId, offerId, retailerId, country, source }) 
 
 /**
  * Conversion data only exists when the affiliate network reports it. Until then
- * these totals stay zero and are labelled as such in admin.
+ * these totals stay zero and are reported as such internally.
  */
 export function clickStats() {
   const list = loadClicks()

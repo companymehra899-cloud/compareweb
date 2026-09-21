@@ -3,8 +3,7 @@ const KEY = 'dealpilot.prefs.v2'
 const defaults = {
   country: 'DE',
   lang: 'en',
-  compare: [],
-  userEmail: ''
+  compare: []
 }
 
 export function loadPrefs() {
@@ -35,13 +34,6 @@ export function setLang(lang) {
   p.lang = lang
   savePrefs(p)
   document.documentElement.lang = lang === 'de' ? 'de' : 'en'
-  return p
-}
-
-export function setEmail(email) {
-  const p = loadPrefs()
-  p.userEmail = email
-  savePrefs(p)
   return p
 }
 

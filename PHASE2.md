@@ -3,6 +3,13 @@
 This document records what was added in Phase 2 and what must still be connected
 before the site can serve live data. Nothing here is a live integration yet.
 
+## Scope update (owner request)
+
+The email-based price-alert/notification system and the admin panel were removed.
+There is no login, no signup and no email collection anywhere in the site. It is a
+free, fully guest-based tool. `alerts.html`, `verify-alert.html`, `manage-alert.html`,
+`admin.html` and their scripts no longer exist.
+
 ## What exists now
 
 ### Data layer (`js/core/`)
@@ -16,7 +23,6 @@ before the site can serve live data. Nothing here is a live integration yet.
 | `history.js` | Records price events; history is only ever written from observed events | Empty by design (no live feed) |
 | `affiliate.js` | Approved-domain allowlist, safe link resolution, click log | No affiliate URLs configured, so no redirects happen |
 | `search.js` | Intent parsing (budget, category, use case, EAN/GTIN) and scoring; exact vs related split | Implemented |
-| `alerts.js` | Guest alerts with random `verification_token` / `unsubscribe_token`; no login | Architecture mode; email provider not configured |
 | `ai.js` | AI boundary: server-side key only, input validation, timeout, rate limit, catalogue-grounded answers | Local catalogue matcher until backend is set |
 
 ### UI wiring
@@ -28,13 +34,10 @@ before the site can serve live data. Nothing here is a live integration yet.
   labelled `Converted estimate`. Every offer shows a freshness badge and a stale
   warning. "View Deal" only becomes a link when the retailer domain is on the
   approved allowlist; otherwise it reads `Retailer link unavailable`.
-- **Alerts**: guests set a target price, receive a random verification link and a
-  separate manage/unsubscribe link. No passwords, no accounts.
-- **New pages**: `verify-alert.html`, `manage-alert.html`.
-- **Admin**: added Data health (missing EAN/MPN, duplicate EANs, offers missing
-  timestamp/source/currency, freshness distribution) and Providers tabs.
 - **SEO**: `hreflang` alternates (`en`, `de`, `x-default`) and canonical are
   injected per path; country activation is tracked separately from translation.
+- **No account surface**: navigation and footer contain no alerts, admin or
+  account links.
 
 ## Honesty rules enforced in code
 
@@ -43,7 +46,7 @@ before the site can serve live data. Nothing here is a live integration yet.
    never write history.
 3. Weak product matches become `possible_match` / `needs_review` / `rejected` and
    are never auto-merged.
-4. All demo rows are labelled, and admin distinguishes demo from configured rows.
+4. All demo rows are labelled.
 5. Conversion never silently swaps a currency symbol; fallback rates are labelled.
 6. The AI key lives on the server. The frontend calls our own backend only.
 
@@ -54,10 +57,8 @@ before the site can serve live data. Nothing here is a live integration yet.
 | Backend API | `VITE_PROJECT_API_BASE_URL` (server holds all secrets) |
 | Product / retailer feeds | Register real providers in `providers.js` |
 | Exchange rates | Register a live `ExchangeRateProvider` |
-| Email (alerts) | Server-side provider + set `EMAIL_CONFIGURED` in `js/core/alerts.js` |
 | AI assistant | Backend route `/ai/assistant`, key stays server-side |
-| Affiliate | Real `affiliate_url` values on approved domains, plus admin auth |
+| Affiliate | Real `affiliate_url` values on approved domains |
 | Database | Replace localStorage with the backend store |
 
-Secrets (`PROJECT_LLM_API_KEY`, `PROJECT_EMAIL_API_KEY`) must never be given a
-`VITE_` prefix.
+The secret `PROJECT_LLM_API_KEY` must never be given a `VITE_` prefix.

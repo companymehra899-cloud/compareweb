@@ -3,6 +3,13 @@
 This build upgrades the existing DealPilot MVP in place. Nothing was rebuilt from scratch.
 Core principle: **no fabricated live data**. Every demo row is labelled, and price history is empty by design.
 
+> **Update (owner request):** the email-based price-alert/notification system and the
+> admin panel were removed. `alerts.html`, `verify-alert.html`, `manage-alert.html`,
+> `admin.html` and their scripts no longer exist. There is no login and no email
+> collection anywhere in the site — it is a free, fully guest-based tool. Lines below
+> that describe those systems are retained only as a record of what was originally
+> built and are no longer present.
+
 ---
 
 ## 1. Files changed / added
@@ -18,11 +25,9 @@ Core principle: **no fabricated live data**. Every demo row is labelled, and pri
 ### Added
 - `js/i18n.js` — UI strings for English + German, stored separately from components.
 - `js/state.js` — country/language/compare preferences, route bootstrapping.
-- `js/db.js` — localStorage "database" layer: products, retailers, guides, offers, alerts, clicks, users.
+- `js/db.js` — localStorage "database" layer: products, retailers, guides, offers, countries, categories, languages.
 - `js/seo.js` — canonical/metadata helpers + Product and Breadcrumb structured data.
-- `css/app.css` — audit upgrade layer (demo badges, filters, mobile sticky CTA, tabs, admin tables).
-- `alerts.html` + `js/alerts.js` — alert management (active / triggered / paused).
-- `admin.html` + `js/admin.js` — admin dashboard (products, retailers, offers, alerts, clicks, guides, countries, languages, analytics).
+- `css/app.css` — audit upgrade layer (demo badges, filters, mobile sticky CTA, tabs, data tables).
 - `how.html` + `js/how.js` — "How DealPilot works" trust page.
 - `affiliate-disclosure.html` + `js/affiliate.js` — affiliate disclosure.
 - `de/index.html`, `de/laptops/index.html`, `de/smartphones/index.html`, `de/headphones/index.html` — SEO country/category routes.
@@ -34,21 +39,20 @@ Core principle: **no fabricated live data**. Every demo row is labelled, and pri
 ## 2. Features implemented
 
 - Conversion-focused homepage: new headline/subtitle, search, example queries, prominent country strip with live vs pending status.
-- Search results page: image (illustration), name, lowest total price, number of offers, discount, retailer, shipping, delivery, stock, last-updated, compare checkbox, price-alert link.
+- Search results page: image (illustration), name, lowest total price, number of offers, discount, retailer, shipping, delivery, stock, freshness, compare checkbox.
 - Sorting: relevance, lowest total price, highest discount, rating, recently updated.
 - Filters: brand, retailer, price ceiling, delivery (country is a global preference).
 - Product detail page: gallery placeholders, all retailer offers with price / shipping / total / delivery / stock / last updated / CTA, cost breakdown, spec table, AI match notes, trade-offs, alternatives.
 - Price history: interactive chart area with periods (30d / 3m / 6m / 12m) and four stats (current / low / high / average). Shows the empty state because no history has been collected.
-- Price alerts: target price + email, stored locally; active / triggered / paused management. Email is explicitly not sent.
 - AI assistant: extracts structured requirements and shows "Best match for your requirements" with price, retailers, specs, why-it-matches, trade-offs, alternative and compare action.
 - Country system: country selection changes currency and offer visibility; Germany is the only market with demo rows.
 - Multilingual: full English + German UI, strings isolated in `js/i18n.js`; FR/ES/IT/NL marked planned.
 - Retailer system: id, name, logo, country, website, affiliate_url, rating, shipping_policy, active, last_updated; live / demo / partnership-pending status.
-- Affiliate architecture: offer-level retailer_id, product_id, affiliate_url, tracking_parameters, commission_status, last_verified; "View Deal" logs a local click when no URL is configured.
+- Affiliate architecture: offer-level retailer_id, product_id, affiliate_url, tracking_parameters, commission_status, last_verified; "View Deal" logs a local click when no approved URL is configured.
 - Trust/transparency: "How DealPilot works" four-step section, data disclaimer, affiliate disclosure page.
-- SEO: metadata, canonical URLs, breadcrumbs, Product + Breadcrumb structured data, sitemap, robots, category landing pages, buying guides.
+- SEO: metadata, canonical URLs, hreflang alternates, breadcrumbs, Product + Breadcrumb structured data, sitemap, robots, category landing pages, buying guides.
 - Buying guides: introduction, criteria, comparison table, pros/cons, FAQ, last updated, product links.
-- Admin dashboard: 9 sections with products, retailers, offers, alerts, clicks, guides, countries, languages, analytics.
+- Guest-only: no login, no signup, no email collection. The site is free to use.
 - Mobile UX: hamburger nav, collapsible filters, horizontal comparison scroll, sticky bottom CTA, clear View Deal buttons.
 - Performance: Vite multi-page build, code-split per page (largest shared chunk ~42 kB JS / 19 kB CSS), no heavy runtime dependencies.
 
@@ -60,9 +64,7 @@ None of these are configured. All are placeholders in `.env.example`.
 
 - Retailer price feeds / official APIs or affiliate networks (Awin, Tradedoubler, Amazon PA-API, etc.).
 - A backend + database (the current persistence is browser localStorage only).
-- An email provider for price-alert delivery (e.g. transactional email service).
 - An LLM provider if you want generative assistant prose instead of the deterministic matcher.
-- Authentication/authorization for the admin panel before any public deployment.
 
 ---
 
@@ -73,7 +75,7 @@ None of these are configured. All are placeholders in `.env.example`.
 - All buying guides (`updated: 2026-09-01`, no lab tests claimed).
 - Ratings and review counts are `null` — deliberately not fabricated.
 - Price history is empty; the chart shows the empty state.
-- Alerts and clicks are stored only in the visitor's browser.
+- Affiliate clicks (when an approved link exists) are stored only in the visitor's browser.
 
 ---
 
@@ -81,9 +83,9 @@ None of these are configured. All are placeholders in `.env.example`.
 
 The MVP has no server database. `js/db.js` defines the intended model as a localStorage document with these collections:
 
-`products`, `retailers`, `guides`, `countries`, `categories`, `languages`, `users`, `offers` (nested in products), and separate local stores for `alerts`, `clicks`, `users`, plus preferences in `js/state.js`.
+`products`, `retailers`, `guides`, `countries`, `categories`, `languages`, and `offers` (nested in products), plus a separate local store for `clicks`, with preferences in `js/state.js`.
 
-Intended server models (documented, not yet implemented): Users, Products, Brands, Categories, Retailers, Offers, Prices, PriceHistory, PriceAlerts, Comparisons, Deals, Articles, AffiliateLinks, Countries, Languages. Product identity fields present: EAN/GTIN, SKU, brand, model, variant, colour, storage, RAM, specs.
+Intended server models (documented, not yet implemented): Products, Brands, Categories, Retailers, Offers, Prices, PriceHistory, Comparisons, Deals, Articles, AffiliateLinks, Countries, Languages. Product identity fields present: EAN/GTIN, SKU, brand, model, variant, colour, storage, RAM, specs.
 
 ---
 
@@ -94,9 +96,8 @@ See `.env.example`. No real keys are stored in this repository.
 - `PROJECT_API_BASE_URL` — backend base URL
 - `PROJECT_DATABASE_URL` — server database
 - `PROJECT_LLM_BASE_URL`, `PROJECT_LLM_API_KEY`, `PROJECT_LLM_MODEL` — assistant provider (user supplied)
-- `PROJECT_EMAIL_API_KEY`, `PROJECT_EMAIL_FROM` — price-alert email
 - `PROJECT_AFFILIATE_NETWORK_ID`, `PROJECT_AFFILIATE_TRACKING_PARAM` — affiliate links
-- `PROJECT_ADMIN_AUTH_SECRET` — admin authentication
+- `VITE_PROJECT_API_BASE_URL` — frontend-visible backend base URL (optional; blank = offline architecture mode)
 
 ---
 
@@ -115,4 +116,4 @@ npm run preview
 ```
 
 The app is a static Vite site. Serve `dist/` from any static host. The `/de/` routes are real pages in the build.
-Before a public launch: add admin authentication, connect a backend/database, connect at least one legitimate price source, and configure the email provider for alerts.
+Before a public launch: connect a backend/database and connect at least one legitimate price source.
