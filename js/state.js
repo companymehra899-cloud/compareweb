@@ -77,10 +77,16 @@ function injectAlternates() {
   document.head.appendChild(marker)
 
   const origin = location.origin
-  const path = location.pathname
-  const m = path.match(/^\/de(\/.*)?$/)
-  const enPath = m ? (m[1] || '/') : path
-  const dePath = m ? path : (path === '/' ? '/de/' : '/de' + path)
+  const rawPath = location.pathname
+  const path = rawPath === '/index.html' ? '/' : rawPath
+  const params = new URLSearchParams(location.search)
+  const keep = new URLSearchParams()
+  ;['id', 'q', 'category', 'ids'].forEach((k) => {
+    const v = params.get(k)
+    if (v) keep.set(k, v)
+  })
+  const query = keep.toString() ? '?' + keep.toString() : ''
+
   const add = (rel, href, hreflang) => {
     const link = document.createElement('link')
     link.rel = rel
@@ -88,8 +94,29 @@ function injectAlternates() {
     if (hreflang) link.hreflang = hreflang
     document.head.appendChild(link)
   }
-  add('alternate', origin + enPath, 'en')
-  add('alternate', origin + dePath, 'de')
-  add('alternate', origin + enPath, 'x-default')
-  if (!document.querySelector('link[rel="canonical"]')) add('canonical', origin + path)
+
+  const deCategory = { '/de/laptops/': 'laptops', '/de/smartphones/': 'smartphones', '/de/headphones/': 'headphones' }
+  const enCategory = { laptops: '/de/laptops/', smartphones: '/de/smartphones/', headphones: '/de/headphones/' }
+
+  let enUrl
+  let deUrl = null
+
+  if (path === '/' || path === '/de/') {
+    enUrl = origin + '/' + query
+    deUrl = origin + '/de/'
+  } else if (deCategory[path]) {
+    enUrl = `${origin}/category.html?id=${deCategory[path]}`
+    deUrl = origin + path
+  } else if (path === '/category.html') {
+    const cat = keep.get('category')
+    enUrl = origin + '/category.html' + query
+    deUrl = cat && enCategory[cat] ? origin + enCategory[cat] : null
+  } else {
+    enUrl = origin + path + query
+  }
+
+  add('alternate', enUrl, 'en')
+  if (deUrl) add('alternate', deUrl, 'de')
+  add('alternate', enUrl, 'x-default')
+  if (!document.querySelector('link[rel="canonical"]')) add('canonical', origin + path + query)
 }

@@ -10,6 +10,12 @@ export function t(key) {
   return tr(loadPrefs().lang, key)
 }
 
+function langLink(href) {
+  const lang = loadPrefs().lang
+  if (lang !== 'de' || href.startsWith('de/') || /\.(xml|txt)$/.test(href)) return href
+  return href + (href.includes('?') ? '&' : '?') + 'lang=de'
+}
+
 export function visitorCurrency() {
   return loadPrefs().country === 'GB' ? 'GBP' : 'EUR'
 }
@@ -68,8 +74,10 @@ export function header(active = 'home') {
   bootFromPath()
   const prefs = loadPrefs()
   const lang = prefs.lang
+  const isDePath = location.pathname.includes('/de/') || location.pathname.endsWith('/de')
+  const withLang = (href) => (lang === 'de' && !href.startsWith('de/') ? href + (href.includes('?') ? '&' : '?') + 'lang=de' : href)
   const links = [
-    ['index.html', 'home', t('navHome')],
+    [isDePath ? 'de/' : 'index.html', 'home', t('navHome')],
     ['deals.html', 'deals', t('navDeals')],
     ['category.html?id=laptops', 'laptops', t('navLaptops')],
     ['compare.html', 'compare', t('navCompare')],
@@ -91,11 +99,11 @@ export function header(active = 'home') {
   </div>
   <header class="site">
     <div class="wrap">
-      <a class="logo" href="index.html"><span class="logo-mark">DP</span> DealPilot</a>
+      <a class="logo" href="${isDePath ? 'de/' : 'index.html'}"><span class="logo-mark">DP</span> DealPilot</a>
       <button class="btn btn-ghost menu-btn" id="menu-btn" type="button">${t('menu')}</button>
       <nav class="nav" id="nav">
-        ${links.map(([href, id, label]) => `<a class="${active === id ? 'active' : ''}" href="${href}">${label}</a>`).join('')}
-        <a class="btn btn-gold" href="assistant.html">${t('askAI')}</a>
+        ${links.map(([href, id, label]) => `<a class="${active === id ? 'active' : ''}" href="${withLang(href)}">${label}</a>`).join('')}
+        <a class="btn btn-gold" href="${withLang('assistant.html')}">${t('askAI')}</a>
         <label class="sel"><span>${t('country')}</span>
           <select id="country-sel">${countries}</select>
         </label>
@@ -110,7 +118,7 @@ export function header(active = 'home') {
   </header>
   <div class="compare-bar ${prefs.compare.length ? 'show' : ''}" id="compare-bar">
     ${prefs.compare.length} ${t('compareCheck')}
-    <a class="btn btn-navy" href="compare.html">${t('seeFull')}</a>
+    <a class="btn btn-navy" href="${withLang('compare.html')}">${t('seeFull')}</a>
   </div>`
 }
 
@@ -119,35 +127,43 @@ export function bindChrome() {
   const l = document.getElementById('lang-sel')
   const m = document.getElementById('menu-btn')
   if (c) c.addEventListener('change', () => { setCountry(c.value); location.reload() })
-  if (l) l.addEventListener('change', () => { setLang(l.value); location.reload() })
+  if (l) l.addEventListener('change', () => {
+    setLang(l.value)
+    const url = new URL(location.href)
+    const pathIsDe = location.pathname.includes('/de/') || location.pathname.endsWith('/de')
+    if (pathIsDe === (l.value === 'de')) url.searchParams.delete('lang')
+    else url.searchParams.set('lang', l.value)
+    location.href = url.toString()
+  })
   if (m) m.addEventListener('click', () => document.getElementById('nav')?.classList.toggle('open'))
 }
 
 export function footer() {
+  const isDePath = location.pathname.includes('/de/') || location.pathname.endsWith('/de')
   return `
   <footer class="site">
     <div class="wrap">
       <div class="ft-grid">
         <div>
-          <a class="logo" href="index.html" style="color:#fff"><span class="logo-mark">DP</span> DealPilot</a>
+          <a class="logo" href="${isDePath ? 'de/' : langLink('index.html')}" style="color:#fff"><span class="logo-mark">DP</span> DealPilot</a>
           <p style="margin-top:12px;font-size:14px;max-width:36ch">${t('affiliateNote')}</p>
         </div>
         <div>
           <h4>${t('navHome')}</h4>
-          <a href="how.html">${t('howTitle')}</a>
-          <a href="deals.html">${t('navDeals')}</a>
-          <a href="compare.html">${t('navCompare')}</a>
-          <a href="assistant.html">${t('navAI')}</a>
+          <a href="${langLink('how.html')}">${t('howTitle')}</a>
+          <a href="${langLink('deals.html')}">${t('navDeals')}</a>
+          <a href="${langLink('compare.html')}">${t('navCompare')}</a>
+          <a href="${langLink('assistant.html')}">${t('navAI')}</a>
         </div>
         <div>
           <h4>${t('navGuides')}</h4>
-          <a href="guides.html">${t('allGuides')}</a>
-          <a href="guide.html?id=laptops-under-800">Laptops €800</a>
-          <a href="guide.html?id=how-price-history">Price history</a>
+          <a href="${langLink('guides.html')}">${t('allGuides')}</a>
+          <a href="${langLink('guide.html?id=laptops-under-800')}">Laptops €800</a>
+          <a href="${langLink('guide.html?id=how-price-history')}">Price history</a>
         </div>
         <div>
           <h4>${t('disclosure')}</h4>
-          <a href="affiliate-disclosure.html">${t('disclosure')}</a>
+          <a href="${langLink('affiliate-disclosure.html')}">${t('disclosure')}</a>
           <a href="sitemap.xml">Sitemap</a>
         </div>
       </div>
