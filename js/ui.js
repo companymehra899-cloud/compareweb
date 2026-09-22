@@ -59,10 +59,10 @@ export function demoBadge() {
   return `<span class="badge-demo">${t('demoData')}</span>`
 }
 
-export function productVisual(p, tall = false) {
+export function productVisual(p, tall = false, view = 'front') {
   const cls = tall ? 'product-visual' : 'mini-visual'
   return `<div class="${cls}" title="${t('illustration')}">
-    <img class="visual-img" src="${productImageSrc(p)}" alt="${p.brand} ${p.name}" loading="lazy" decoding="async" />
+    <img class="visual-img" src="${productImageSrc(p, view)}" alt="${p.brand} ${p.name}" loading="lazy" decoding="async" />
   </div>`
 }
 

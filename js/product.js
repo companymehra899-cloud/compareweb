@@ -31,9 +31,9 @@ document.getElementById('page').innerHTML = `
   <div class="layout">
     <div>
       <div class="card">
-        ${productVisual(p, true)}
+        <div id="hero">${productVisual(p, true)}</div>
         <div class="gallery" id="gallery">
-          ${['Front', 'Ports', 'Keyboard', 'Nameplate'].map((g, i) => `<div class="g ${i === 0 ? 'on' : ''}">${g}</div>`).join('')}
+          ${[['front', 'Front'], ['ports', 'Ports'], ['keyboard', 'Keyboard'], ['nameplate', 'Nameplate']].map(([v, g], i) => `<div class="g ${i === 0 ? 'on' : ''}" data-view="${v}">${g}</div>`).join('')}
         </div>
         <p class="mute">${t('illustration')} · ${t('demoData')}</p>
         <div class="kicker" style="margin-top:12px">${p.brand}</div>
@@ -110,6 +110,8 @@ document.getElementById('gallery').addEventListener('click', (e) => {
   const g = e.target.closest('.g')
   if (!g) return
   document.querySelectorAll('.gallery .g').forEach((x) => x.classList.toggle('on', x === g))
+  const hero = document.getElementById('hero')
+  if (hero) hero.innerHTML = productVisual(p, true, g.dataset.view || 'front')
 })
 document.getElementById('periods').addEventListener('click', (e) => {
   const b = e.target.closest('.period')

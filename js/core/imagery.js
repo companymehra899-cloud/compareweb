@@ -6,6 +6,15 @@ const SHAPE_BY_CATEGORY = {
   smartwatches: 'watch'
 }
 
+export const PRODUCT_VIEWS = ['front', 'ports', 'keyboard', 'nameplate']
+
+const VIEW_LABEL = {
+  front: 'Front view',
+  ports: 'Ports',
+  keyboard: 'Keyboard',
+  nameplate: 'Nameplate'
+}
+
 function clamp(n) {
   return Math.max(0, Math.min(255, Math.round(n)))
 }
@@ -63,13 +72,59 @@ function shapeMarkup(shape) {
   }
 }
 
-export function productImageSvg(product = {}) {
+function zoom(scale, dx, dy) {
+  return `transform="translate(${320 + dx} ${210 + dy}) scale(${scale}) translate(-320 -210)"`
+}
+
+function portCallouts() {
+  return `<g opacity="0.85">
+    <circle cx="486" cy="188" r="7" fill="#ffffff"/>
+    <line x1="486" y1="188" x2="566" y2="146" stroke="#ffffff" stroke-width="2.5"/>
+    <rect x="566" y="132" width="18" height="20" rx="5" fill="#ffffff" opacity="0.85"/>
+    <circle cx="486" cy="224" r="7" fill="#ffffff" opacity="0.75"/>
+    <line x1="486" y1="224" x2="566" y2="224" stroke="#ffffff" stroke-width="2.5" opacity="0.75"/>
+    <rect x="566" y="214" width="22" height="18" rx="4" fill="#ffffff" opacity="0.7"/>
+    <circle cx="486" cy="260" r="7" fill="#ffffff" opacity="0.6"/>
+    <line x1="486" y1="260" x2="566" y2="300" stroke="#ffffff" stroke-width="2.5" opacity="0.6"/>
+    <rect x="566" y="292" width="14" height="14" rx="7" fill="#ffffff" opacity="0.6"/>
+  </g>`
+}
+
+function keyboardGrid() {
+  let cells = ''
+  for (let row = 0; row < 4; row += 1) {
+    for (let col = 0; col < 12; col += 1) {
+      cells += `<rect x="${200 + col * 22}" y="${196 + row * 22}" width="18" height="18" rx="4" fill="#ffffff" opacity="0.55"/>`
+    }
+  }
+  return `<g opacity="0.7">${cells}</g>`
+}
+
+function viewLayer(view, brand) {
+  switch (view) {
+    case 'ports':
+      return { transform: zoom(1.5, -64, 0), overlay: portCallouts() }
+    case 'keyboard':
+      return { transform: zoom(1.5, 0, 34), overlay: keyboardGrid() }
+    case 'nameplate':
+      return {
+        transform: zoom(1.9, 0, 66),
+        overlay: `<text x="320" y="238" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="700" fill="#ffffff" opacity="0.9">${brand}</text>`
+      }
+    default:
+      return { transform: '', overlay: '' }
+  }
+}
+
+export function productImageSvg(product = {}, view = 'front') {
   const base = product.swatch || '#1f3a5f'
   const accent = product.accent || '#c9a227'
   const shape = SHAPE_BY_CATEGORY[product.category] || 'generic'
   const brand = escapeXml(product.brand || '')
   const label = escapeXml(product.category || '')
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" width="640" height="420" role="img" aria-label="${escapeXml(product.name || 'Product')}">
+  const active = PRODUCT_VIEWS.includes(view) ? view : 'front'
+  const layer = viewLayer(active, brand)
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" width="640" height="420" role="img" aria-label="${escapeXml(product.name || 'Product')} — ${VIEW_LABEL[active]}">
   <defs>
     <linearGradient id="backdrop" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="${shade(base, 0.22)}"/>
@@ -84,16 +139,20 @@ export function productImageSvg(product = {}) {
   <circle cx="520" cy="86" r="120" fill="${shade(accent, 0.05)}" opacity="0.16"/>
   <circle cx="120" cy="360" r="150" fill="#000000" opacity="0.12"/>
   <ellipse cx="320" cy="356" rx="196" ry="26" fill="#000000" opacity="0.22"/>
-  ${shapeMarkup(shape)}
-  <text x="40" y="380" font-family="Georgia, 'Times New Roman', serif" font-size="28" font-weight="700" fill="#ffffff" opacity="0.92">${brand}</text>
-  <text x="600" y="380" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#ffffff" opacity="0.6">${label}</text>
+  <g ${layer.transform}>${shapeMarkup(shape)}</g>
+  ${layer.overlay}
+  <text x="40" y="66" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#ffffff" opacity="0.55">${VIEW_LABEL[active]}</text>
+  <text x="40" y="384" font-family="Georgia, 'Times New Roman', serif" font-size="28" font-weight="700" fill="#ffffff" opacity="0.92">${brand}</text>
+  <text x="600" y="384" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#ffffff" opacity="0.6">${label}</text>
 </svg>`
 }
 
-export function productImageDataUri(product = {}) {
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(productImageSvg(product))}`
+export function productImageDataUri(product = {}, view = 'front') {
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(productImageSvg(product, view))}`
 }
 
-export function productImageSrc(product = {}) {
-  return product.image || productImageDataUri(product)
+export function productImageSrc(product = {}, view = 'front') {
+  if (product.images && product.images[view]) return product.images[view]
+  if (product.image) return product.image
+  return productImageDataUri(product, view)
 }
