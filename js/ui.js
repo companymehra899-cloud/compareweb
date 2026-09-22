@@ -5,6 +5,7 @@ import { getRetailers } from './db.js'
 import { displayPriceSync } from './core/currency.js'
 import { freshnessState, freshnessLabel, freshnessClass } from './core/freshness.js'
 import { resolveAffiliateLink } from './core/affiliate.js'
+import { productImageSrc } from './core/imagery.js'
 
 export function t(key) {
   return tr(loadPrefs().lang, key)
@@ -59,10 +60,9 @@ export function demoBadge() {
 }
 
 export function productVisual(p, tall = false) {
-  const bg = p.swatch || p.color || '#1f3a5f'
-  const ac = p.accent || '#c9a227'
-  return `<div class="${tall ? 'product-visual' : 'mini-visual'}" style="background:${bg}" title="${t('illustration')}">
-    <div class="${tall ? 'laptop' : 'mini-laptop'}"><${tall ? 'div class="screen"' : 'i'} style="background:linear-gradient(145deg, ${ac}, ${bg})"></${tall ? 'div' : 'i'}></div>
+  const cls = tall ? 'product-visual' : 'mini-visual'
+  return `<div class="${cls}" title="${t('illustration')}">
+    <img class="visual-img" src="${productImageSrc(p)}" alt="${p.brand} ${p.name}" loading="lazy" decoding="async" />
   </div>`
 }
 

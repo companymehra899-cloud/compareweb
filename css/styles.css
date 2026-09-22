@@ -488,8 +488,10 @@ footer a { display: block; font-size: 14px; opacity: 0.85; margin: 6px 0; }
   align-items: center;
 }
 .mini-visual {
-  height: 88px; border-radius: 12px; display: grid; place-items: center;
+  height: 88px; border-radius: 12px; display: grid; place-items: center; overflow: hidden;
 }
+.visual-img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.product-visual { border: 1px solid var(--line); background: #fff; }
 .mini-laptop { width: 78px; height: 50px; border-radius: 6px; background: #222; position: relative; }
 .mini-laptop i { display: block; margin: 5px; height: calc(100% - 10px); border-radius: 3px; }
 
