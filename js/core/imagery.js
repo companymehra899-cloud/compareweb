@@ -6,6 +6,8 @@ const SHAPE_BY_CATEGORY = {
   smartwatches: 'watch'
 }
 
+import { productImage } from './product-images.js'
+
 export const PRODUCT_VIEWS = ['front', 'ports', 'keyboard', 'nameplate']
 
 const VIEW_LABEL = {
@@ -152,7 +154,15 @@ export function productImageDataUri(product = {}, view = 'front') {
 }
 
 export function productImageSrc(product = {}, view = 'front') {
+  const real = productImage(product)
+  if (real?.src) return real.src
   if (product.images && product.images[view]) return product.images[view]
   if (product.image) return product.image
   return productImageDataUri(product, view)
+}
+
+export function productImageCredit(product = {}) {
+  const real = productImage(product)
+  if (!real?.src) return null
+  return real
 }

@@ -4,6 +4,7 @@ import { loadPrefs } from './state.js'
 import { matchProducts } from './ai.js'
 import { mount, t, offerMoney, amountMoney, freshBadge, productVisual, demoBadge, offerTable, resultCard, bindCompareChecks, qs, toast } from './ui.js'
 import { recordPriceEvent, historyStats, HISTORY_EMPTY_MESSAGE } from './core/history.js'
+import { productImageCredit } from './core/imagery.js'
 import { resolveAffiliateLink, trackClick } from './core/affiliate.js'
 import { track } from './core/analytics.js'
 
@@ -22,6 +23,7 @@ const retailers = getRetailers()
 // Only genuinely observed non-seed offers may enter the price history store.
 if (lo && lo.source && lo.source !== 'seed') recordPriceEvent(lo, p.id)
 const stats = historyStats(p.id)
+const imageCredit = productImageCredit(p)
 
 const periods = [{ d: 30, l: '30 days' }, { d: 90, l: '3 months' }, { d: 180, l: '6 months' }, { d: 365, l: '12 months' }]
 let period = 365
@@ -32,10 +34,14 @@ document.getElementById('page').innerHTML = `
     <div>
       <div class="card">
         <div id="hero">${productVisual(p, true)}</div>
-        <div class="gallery" id="gallery">
+        ${imageCredit
+          ? ''
+          : `<div class="gallery" id="gallery">
           ${[['front', 'Front'], ['ports', 'Ports'], ['keyboard', 'Keyboard'], ['nameplate', 'Nameplate']].map(([v, g], i) => `<div class="g ${i === 0 ? 'on' : ''}" data-view="${v}">${g}</div>`).join('')}
-        </div>
-        <p class="mute">${t('illustration')} · ${t('demoData')}</p>
+        </div>`}
+        <p class="mute">${imageCredit
+          ? `Photo: <a href="${imageCredit.source}" target="_blank" rel="noopener nofollow">${imageCredit.credit}</a> · <a href="${imageCredit.licenseUrl}" target="_blank" rel="noopener nofollow">${imageCredit.license}</a> · ${t('demoData')}`
+          : `${t('illustration')} · ${t('demoData')}`}</p>
         <div class="kicker" style="margin-top:12px">${p.brand}</div>
         <h1 style="font-family:var(--serif);font-size:clamp(26px,3vw,38px);color:var(--navy);margin:6px 0">${p.name} ${demoBadge()}</h1>
         <div class="mute">${p.model} · EAN ${p.ean} · SKU ${p.sku} · ${p.variant} · ${p.color}</div>
@@ -106,7 +112,7 @@ document.getElementById('page').innerHTML = `
   </div>
 `
 
-document.getElementById('gallery').addEventListener('click', (e) => {
+document.getElementById('gallery')?.addEventListener('click', (e) => {
   const g = e.target.closest('.g')
   if (!g) return
   document.querySelectorAll('.gallery .g').forEach((x) => x.classList.toggle('on', x === g))
