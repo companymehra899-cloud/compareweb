@@ -232,3 +232,24 @@
 }
 .pager { display: flex; gap: 12px; align-items: center; justify-content: center; margin: 22px 0; }
 .h3 { font-family: var(--serif); color: var(--navy); margin: 24px 0 10px; font-size: 20px; }
+
+/* Mobile refinements */
+@media (max-width: 640px) {
+  .wrap { width: calc(100% - 28px); }
+  .gallery { grid-template-columns: repeat(2, 1fr); }
+  .product-visual { height: 220px; }
+  .mini-visual { height: 120px; }
+  .hist-stats { grid-template-columns: 1fr 1fr; }
+  .specs { grid-template-columns: 1fr; }
+  .hero { padding: 40px 0 48px; }
+  .topbar .wrap { font-size: 12px; }
+  .price { font-size: 24px; }
+  .result { padding: 14px; gap: 12px; }
+  .crumb { font-size: 12px; }
+}
+@media (max-width: 420px) {
+  .wrap { width: calc(100% - 20px); }
+  .gallery { grid-template-columns: repeat(2, 1fr); }
+  .btn { padding: 9px 12px; font-size: 13px; }
+  .logo { font-size: 19px; }
+}
