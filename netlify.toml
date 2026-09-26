@@ -1,0 +1,23 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/de"
+  to = "/de/"
+  status = 301
+
+[[redirects]]
+  from = "/de/laptops"
+  to = "/de/laptops/"
+  status = 301
+
+[[redirects]]
+  from = "/de/smartphones"
+  to = "/de/smartphones/"
+  status = 301
+
+[[redirects]]
+  from = "/de/headphones"
+  to = "/de/headphones/"
+  status = 301
