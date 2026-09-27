@@ -76,9 +76,12 @@ function injectAlternates() {
   marker.name = 'dp-alternates'
   document.head.appendChild(marker)
 
+  const base = import.meta.env.BASE_URL || '/'
   const origin = location.origin
   const rawPath = location.pathname
-  const path = rawPath === '/index.html' ? '/' : rawPath
+  const sitePath = base !== '/' && rawPath.startsWith(base) ? '/' + rawPath.slice(base.length) : rawPath
+  const path = sitePath === '/index.html' ? '/' : sitePath
+  const abs = (p) => origin + (base === '/' ? p : base + p.replace(/^\//, ''))
   const params = new URLSearchParams(location.search)
   const keep = new URLSearchParams()
   ;['id', 'q', 'category', 'ids'].forEach((k) => {
@@ -102,21 +105,21 @@ function injectAlternates() {
   let deUrl = null
 
   if (path === '/' || path === '/de/') {
-    enUrl = origin + '/' + query
-    deUrl = origin + '/de/'
+    enUrl = abs('/') + query
+    deUrl = abs('/de/')
   } else if (deCategory[path]) {
-    enUrl = `${origin}/category.html?id=${deCategory[path]}`
-    deUrl = origin + path
+    enUrl = abs(`/category.html?id=${deCategory[path]}`)
+    deUrl = abs(path)
   } else if (path === '/category.html') {
     const cat = keep.get('category')
-    enUrl = origin + '/category.html' + query
-    deUrl = cat && enCategory[cat] ? origin + enCategory[cat] : null
+    enUrl = abs('/category.html') + query
+    deUrl = cat && enCategory[cat] ? abs(enCategory[cat]) : null
   } else {
-    enUrl = origin + path + query
+    enUrl = abs(path) + query
   }
 
   add('alternate', enUrl, 'en')
   if (deUrl) add('alternate', deUrl, 'de')
   add('alternate', enUrl, 'x-default')
-  if (!document.querySelector('link[rel="canonical"]')) add('canonical', origin + path + query)
+  if (!document.querySelector('link[rel="canonical"]')) add('canonical', abs(path) + query)
 }

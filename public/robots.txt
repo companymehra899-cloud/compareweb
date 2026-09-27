@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://companymehra899-cloud.github.io/compareweb/sitemap.xml

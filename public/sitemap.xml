@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Replace https://companymehra899-cloud.github.io/compareweb with your custom domain (keep the trailing slash) when you connect one. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://companymehra899-cloud.github.io/compareweb/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://companymehra899-cloud.github.io/compareweb/de/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://companymehra899-cloud.github.io/compareweb/" />
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/search.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/category.html?id=laptops</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://companymehra899-cloud.github.io/compareweb/category.html?id=laptops" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://companymehra899-cloud.github.io/compareweb/de/laptops/" />
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/category.html?id=smartphones</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://companymehra899-cloud.github.io/compareweb/category.html?id=smartphones" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://companymehra899-cloud.github.io/compareweb/de/smartphones/" />
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/category.html?id=headphones</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://companymehra899-cloud.github.io/compareweb/category.html?id=headphones" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://companymehra899-cloud.github.io/compareweb/de/headphones/" />
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/deals.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/compare.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/assistant.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/guides.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/guide.html?id=laptops-under-800</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/guide.html?id=how-price-history</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/guide.html?id=headphones-travel</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/guide.html?id=smartphones-under-300</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/stores.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/how.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/affiliate-disclosure.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/de/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://companymehra899-cloud.github.io/compareweb/de/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://companymehra899-cloud.github.io/compareweb/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://companymehra899-cloud.github.io/compareweb/" />
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/de/laptops/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://companymehra899-cloud.github.io/compareweb/de/laptops/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://companymehra899-cloud.github.io/compareweb/category.html?id=laptops" />
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/de/smartphones/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://companymehra899-cloud.github.io/compareweb/de/smartphones/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://companymehra899-cloud.github.io/compareweb/category.html?id=smartphones" />
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://companymehra899-cloud.github.io/compareweb/de/headphones/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://companymehra899-cloud.github.io/compareweb/de/headphones/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://companymehra899-cloud.github.io/compareweb/category.html?id=headphones" />
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>
