@@ -85,6 +85,10 @@ export const PRODUCT_IMAGES = {
   }
 }
 
+const BASE = (import.meta.env.BASE_URL || '/').replace(/\/$/, '')
+
 export function productImage(product) {
-  return PRODUCT_IMAGES[product?.id] || null
+  const img = PRODUCT_IMAGES[product?.id]
+  if (!img) return null
+  return { ...img, src: BASE + img.src }
 }

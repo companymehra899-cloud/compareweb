@@ -62,7 +62,7 @@ export function bootFromPath() {
   document.documentElement.lang = p.lang === 'de' ? 'de' : 'en'
   if (!document.querySelector('base')) {
     const base = document.createElement('base')
-    base.href = '/'
+    base.href = import.meta.env.BASE_URL || '/'
     document.head.prepend(base)
   }
   injectAlternates()
