@@ -1,3 +1,5 @@
+import { reportClick } from './api.js'
+
 /**
  * Affiliate link safety + click tracking.
  *
@@ -69,6 +71,7 @@ export function trackClick({ productId, offerId, retailerId, country, source }) 
   }
   list.push(row)
   localStorage.setItem(CLICKS_KEY, JSON.stringify(list.slice(-5000)))
+  reportClick(row)
   return row
 }
 

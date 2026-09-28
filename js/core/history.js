@@ -1,3 +1,5 @@
+import { apiEnabled, fetchHistory } from './api.js'
+
 /**
  * Price history engine.
  *
@@ -20,6 +22,35 @@ export function loadHistory() {
 
 export function saveHistory(list) {
   localStorage.setItem(HISTORY_KEY, JSON.stringify(list))
+}
+
+/**
+ * Merge server-recorded snapshots into the local store once per page load, so
+ * the price chart reflects real observed prices from ingestion runs. Server
+ * rows are recorded events, never generated points.
+ */
+if (apiEnabled() && typeof location !== 'undefined') {
+  const pid = new URLSearchParams(location.search).get('id')
+  if (pid) {
+    const remote = await fetchHistory(pid)
+    if (remote?.length) {
+      const existing = loadHistory()
+      const seen = new Set(existing.map((r) => `${r.offer_id}|${r.timestamp}`))
+      const additions = remote
+        .filter((r) => !seen.has(`${r.offer_id}|${r.captured_at}`))
+        .map((r) => ({
+          product_id: pid,
+          offer_id: r.offer_id,
+          retailer_id: r.retailer_id,
+          price: r.price,
+          shipping: null,
+          currency: r.currency,
+          total_price: r.price,
+          timestamp: r.captured_at
+        }))
+      if (additions.length) saveHistory(existing.concat(additions))
+    }
+  }
 }
 
 /**

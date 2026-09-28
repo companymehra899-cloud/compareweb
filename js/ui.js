@@ -6,9 +6,24 @@ import { displayPriceSync } from './core/currency.js'
 import { freshnessState, freshnessLabel, freshnessClass } from './core/freshness.js'
 import { resolveAffiliateLink } from './core/affiliate.js'
 import { productImageSrc } from './core/imagery.js'
+import { isLive } from './core/dataset.js'
+
+/**
+ * Label keys that mean different things depending on where the catalogue came
+ * from. When a backend serves live retailer data these resolve to the live
+ * wording, otherwise the honest demo wording is used.
+ */
+const LIVE_LABELS = {
+  demoData: 'liveData',
+  demoBanner: 'liveBanner',
+  updatedSeed: 'updatedLive',
+  marketLive: 'liveMarketLive'
+}
 
 export function t(key) {
-  return tr(loadPrefs().lang, key)
+  const lang = loadPrefs().lang
+  if (isLive() && LIVE_LABELS[key]) return tr(lang, LIVE_LABELS[key])
+  return tr(lang, key)
 }
 
 function langLink(href) {

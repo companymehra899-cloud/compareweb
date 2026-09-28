@@ -1,6 +1,9 @@
 import { PRODUCTS, RETAILERS, GUIDES, COUNTRIES, CATEGORIES, LANGUAGES, SEED_AT } from './data.js'
+import { apiEnabled, fetchCatalogue } from './core/api.js'
+import { setDatasetStatus } from './core/dataset.js'
 
 const DB_KEY = 'dealpilot.db.v2'
+const REMOTE_TTL_MINUTES = 15
 
 function clone(x) {
   return JSON.parse(JSON.stringify(x))
@@ -23,20 +26,20 @@ function countryStatus(code) {
 
 /** Enrich seed rows with the phase-2 fields without touching the seed file shape. */
 function enrich(db) {
-  db.countries = db.countries.map((c) => ({
+  db.countries = (db.countries || []).map((c) => ({
     ...c,
     country_status: c.country_status || countryStatus(c.code),
-    data_status: c.code === 'DE' ? 'demo' : 'none'
+    data_status: c.code === 'DE' ? db.source || 'demo' : 'none'
   }))
-  db.retailers = db.retailers.map((r) => ({
+  db.retailers = (db.retailers || []).map((r) => ({
     ...r,
     domain: r.domain || domainFrom(r.website),
     affiliate_network: r.affiliate_network || null,
-    data_source: r.data_source || 'demo_seed',
+    data_source: r.data_source || db.source || 'demo_seed',
     active_offers: null,
     stale_offers: null
   }))
-  db.products = db.products.map((p) => ({
+  db.products = (db.products || []).map((p) => ({
     ...p,
     mpn: p.mpn || p.sku || null,
     country_status: p.country_status || 'beta',
@@ -59,8 +62,52 @@ function emptyDb() {
     countries: clone(COUNTRIES),
     categories: clone(CATEGORIES),
     languages: clone(LANGUAGES),
-    seedAt: SEED_AT
+    seedAt: SEED_AT,
+    source: 'demo_seed',
+    generatedAt: SEED_AT
   })
+}
+
+function isLiveDb(db) {
+  return !!db?.source && db.source !== 'demo_seed' && db.source !== 'demo'
+}
+
+function register(db) {
+  setDatasetStatus({
+    status: isLiveDb(db) ? 'live' : 'demo',
+    updated: db.generatedAt || db.seedAt || SEED_AT,
+    provider: db.source || 'demo_seed'
+  })
+  return db
+}
+
+/** True when a previously hydrated remote catalogue is still fresh enough. */
+function hasFreshRemote() {
+  try {
+    const raw = localStorage.getItem(DB_KEY)
+    if (!raw) return false
+    const db = JSON.parse(raw)
+    if (!isLiveDb(db) || !db.generatedAt) return false
+    return Date.now() - Date.parse(db.generatedAt) < REMOTE_TTL_MINUTES * 60 * 1000
+  } catch {
+    return false
+  }
+}
+
+/**
+ * Hydrate once per page load before any page module reads the catalogue.
+ * Top-level await keeps every existing synchronous consumer (getProducts,
+ * getProductById, ...) working unchanged. Falls back silently to the demo seed.
+ */
+if (apiEnabled() && !hasFreshRemote()) {
+  const remote = await fetchCatalogue()
+  if (remote) {
+    try {
+      localStorage.setItem(DB_KEY, JSON.stringify(remote))
+    } catch {
+      /* quota or private mode: keep in-memory demo seed */
+    }
+  }
 }
 
 export function loadDb() {
@@ -69,13 +116,13 @@ export function loadDb() {
     if (!raw) {
       const db = emptyDb()
       localStorage.setItem(DB_KEY, JSON.stringify(db))
-      return db
+      return register(db)
     }
     const db = JSON.parse(raw)
-    if (!db.products?.length) return emptyDb()
-    return enrich(db)
+    if (!db.products?.length) return register(emptyDb())
+    return register(enrich(db))
   } catch {
-    return emptyDb()
+    return register(emptyDb())
   }
 }
 
@@ -87,6 +134,7 @@ export function saveDb(db) {
 export function resetDb() {
   const db = emptyDb()
   saveDb(db)
+  register(db)
   return db
 }
 

@@ -1,3 +1,5 @@
+import { apiEnabled, fetchCatalogue } from './api.js'
+
 /**
  * Provider abstraction for legitimate product/price data sources.
  *
@@ -156,3 +158,53 @@ export async function ingestAll() {
   }
   return out
 }
+
+/**
+ * Provider that reads the normalized catalogue from the DealPilot backend.
+ * Registered only when VITE_PROJECT_API_BASE_URL is configured, so an
+ * unconfigured build makes no network calls.
+ */
+export class ApiCatalogueProvider extends ProductDataProvider {
+  get id() { return 'api-catalogue' }
+  get label() { return 'DealPilot backend API' }
+  get status() { return apiEnabled() ? 'configured' : 'unconfigured' }
+
+  async products() {
+    const data = await fetchCatalogue()
+    return (data?.products || []).map((p) => this.normalize(p))
+  }
+
+  normalize(p) {
+    const offer = p.offers?.[0] || null
+    return {
+      product: {
+        canonicalId: p.id,
+        name: p.name,
+        brand: p.brand || null,
+        mpn: p.mpn || p.sku || null,
+        ean: p.ean || null,
+        model: p.model || null,
+        category: p.category || null,
+        variant: p.variant || null,
+        attributes: {
+          storage: p.specs?.Storage || null,
+          ram: p.specs?.RAM || null,
+          color: p.color || null,
+          size: p.specs?.Display || null
+        },
+        demo: false
+      },
+      retailer: null,
+      offer,
+      price: offer?.total ?? null,
+      currency: offer?.currency || 'EUR',
+      shipping: offer?.shipping ?? null,
+      availability: offer?.availability || null,
+      delivery: offer?.delivery || null,
+      source: offer?.source || 'api',
+      timestamp: offer?.timestamp || null
+    }
+  }
+}
+
+if (apiEnabled()) registerProvider('product', new ApiCatalogueProvider())

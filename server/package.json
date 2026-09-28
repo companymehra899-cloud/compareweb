@@ -1,0 +1,17 @@
+{
+  "name": "dealpilot-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "DealPilot Europe backend: normalizes retailer/eBay feeds into the catalogue API used by the frontend.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:init": "wrangler d1 execute dealpilot --file=./schema.sql --remote",
+    "db:init:local": "wrangler d1 execute dealpilot --file=./schema.sql --local",
+    "ingest:local": "wrangler dev --test-scheduled"
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0"
+  }
+}

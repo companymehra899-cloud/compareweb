@@ -1,0 +1,10 @@
+# Local-only secrets for `wrangler dev`. Copy to .dev.vars (git-ignored) and fill in.
+# Never commit real values.
+
+EBAY_CLIENT_ID=your-ebay-app-id
+EBAY_CLIENT_SECRET=your-ebay-cert-id
+EBAY_AFFILIATE_CAMPAIGN_ID=
+EBAY_AFFILIATE_ROTATION_ID=
+AWIN_API_TOKEN=
+AWIN_PUBLISHER_ID=
+INGEST_TOKEN=choose-a-random-string

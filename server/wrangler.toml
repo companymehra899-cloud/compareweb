@@ -1,0 +1,25 @@
+name = "dealpilot-api"
+main = "src/index.js"
+compatibility_date = "2026-01-01"
+
+# Non-secret configuration. Secrets (eBay/Awin credentials) are set with:
+#   npx wrangler secret put EBAY_CLIENT_ID
+#   npx wrangler secret put EBAY_CLIENT_SECRET
+#   npx wrangler secret put EBAY_AFFILIATE_CAMPAIGN_ID
+#   npx wrangler secret put AWIN_API_TOKEN
+#   npx wrangler secret put INGEST_TOKEN
+[vars]
+ALLOWED_ORIGINS = "http://localhost:5173,https://companymehra899-cloud.github.io"
+EBAY_MARKETPLACE_ID = "EBAY_DE"
+EBAY_ENVIRONMENT = "production"
+
+# Create the database once, then paste its id here:
+#   npx wrangler d1 create dealpilot
+[[d1_databases]]
+binding = "DB"
+database_name = "dealpilot"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+# Refresh live prices every 6 hours.
+[triggers]
+crons = ["0 */6 * * *"]
