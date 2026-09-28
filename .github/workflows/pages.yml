@@ -28,6 +28,11 @@ jobs:
         run: npm run build
         env:
           VITE_BASE: /compareweb/
+          # Set this as a repository variable once the backend Worker is deployed:
+          # Settings > Secrets and variables > Actions > Variables
+          # Name: VITE_PROJECT_API_BASE_URL   Value: https://dealpilot-api.<you>.workers.dev
+          # Leave unset to serve the demo catalogue.
+          VITE_PROJECT_API_BASE_URL: ${{ vars.VITE_PROJECT_API_BASE_URL }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
