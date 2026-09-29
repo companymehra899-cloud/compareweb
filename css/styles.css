@@ -143,6 +143,25 @@ header.site .wrap {
   max-width: 16ch;
 }
 .hero p.lead { max-width: 46ch; color: #d5deea; font-size: 18px; margin-bottom: 28px; }
+.hero-grid {
+  display: grid;
+  gap: 40px;
+  position: relative;
+  z-index: 1;
+}
+.hero-art { display: none; }
+.hero-art img { width: 100%; height: auto; display: block; }
+@media (min-width: 1024px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 420px); align-items: center; }
+  .hero-art { display: block; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-art img { animation: heroArtIn 0.7s ease both; }
+}
+@keyframes heroArtIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
 .search-box {
   background: #fff;
   border-radius: 18px;

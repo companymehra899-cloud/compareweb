@@ -18,23 +18,29 @@
   <div id="chrome-top"></div>
 
   <section class="hero">
-    <div class="wrap">
-      <div class="kicker" data-t="heroKicker">European price comparison</div>
-      <h1 data-t="heroTitle">Find the Best Price Across Europe</h1>
-      <p class="lead" data-t="heroLead">Compare prices, delivery and offers from European retailers.</p>
-      <div class="hero-search-row">
-        <form class="search-box" id="hero-search" action="search.html">
-          <input name="q" id="q" autocomplete="off" data-t-placeholder="searchPlaceholder" placeholder="Search a product or describe what you need..." />
-          <button class="btn btn-gold" type="submit" data-t="comparePrices">Compare Prices</button>
-          <div class="suggest" id="suggest"></div>
-        </form>
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <div class="kicker" data-t="heroKicker">European price comparison</div>
+        <h1 data-t="heroTitle">Find the Best Price Across Europe</h1>
+        <p class="lead" data-t="heroLead">Compare prices, delivery and offers from European retailers.</p>
+        <div class="hero-search-row">
+          <form class="search-box" id="hero-search" action="search.html">
+            <input name="q" id="q" autocomplete="off" data-t-placeholder="searchPlaceholder" placeholder="Search a product or describe what you need..." />
+            <button class="btn btn-gold" type="submit" data-t="comparePrices">Compare Prices</button>
+            <div class="suggest" id="suggest"></div>
+          </form>
+        </div>
+        <div class="examples" data-t="examples">Examples:
+          <a href="search.html?q=iPhone+under+700" data-t="ex1">iPhone under €700</a>
+          <a href="search.html?q=Laptop+for+programming+under+800" data-t="ex2">Laptop for programming under €800</a>
+          <a href="search.html?q=noise-cancelling+headphones" data-t="ex3">Best noise-cancelling headphones</a>
+        </div>
+        <div class="country-strip" id="country-strip"></div>
       </div>
-      <div class="examples" data-t="examples">Examples:
-        <a href="search.html?q=iPhone+under+700" data-t="ex1">iPhone under €700</a>
-        <a href="search.html?q=Laptop+for+programming+under+800" data-t="ex2">Laptop for programming under €800</a>
-        <a href="search.html?q=noise-cancelling+headphones" data-t="ex3">Best noise-cancelling headphones</a>
+      <!-- Illustration: unDraw (undraw.co) — free for commercial use, recolored to the DealPilot palette. -->
+      <div class="hero-art">
+        <img src="/assets/illustrations/price-comparison.svg" alt="" width="800" height="574" decoding="async" />
       </div>
-      <div class="country-strip" id="country-strip"></div>
     </div>
   </section>
 
